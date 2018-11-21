@@ -1,3 +1,79 @@
 <resources>
-    <string name="app_name">Hw3</string>
+    <string name="app_name">Homework 3</string>
+    <string name="dialog">Howdy!\nI\'m Flowey!\nFlowey the Flower!</string>
+    <string name="annoyingDogDialog">Bark! Bark! Bark.</string>
+    <string-array name="floweyDialog">
+        <item>Trying to get rich by playing the lottery is like trying to commit suicide by flying on commercial airlines.</item>
+        <item>I didn\’t exist in your world until you started reading this sentence of mine.</item>
+        <item>Your stomach thinks all potato is mashed.</item>
+        <item>I wonder what my dog named me?</item>
+        <item>If I touch my phone in the right places, a pizza will show up at my front door.</item>
+        <item>Vomiting is your stomach hitting ctrl-z.</item>
+        <item>Imaginary friends will always have 1 real friend while you can have zero real friends.</item>
+        <item>Smelling is basically wireless tasting.</item>
+        <item>It\’s always a sunny day above the clouds!</item>
+        <item>Saying "um" is the human equivalent to buffering.</item>
+        <item>History classes are only going to get longer and harder as time goes on.</item>
+        <item>I have no idea what I\'ve forgotten.</item>
+        <item>Aliens invaded the Moon on July 20th, 1969.</item>
+        <item>"my entire life has led up to this moment" is always true.</item>
+        <item>"Arms" is another word for guns, and "guns" is another word for arms.</item>
+        <item>In order to fall asleep, you have to pretend to be asleep.</item>
+        <item>Nothing is on fire, fire is on things.</item>
+        <item>I wonder if I am closer to my death or my birth right now.</item>
+        <item>Spacesuits are literally made to protect astronauts from nothing</item>
+        <item>In the last 20 years, I won over $7,300 by not buying a lottery ticket every day.</item>
+        <item>You\'re too big to ride the dog by the time you\'re smart enough to think to ride the dog.</item>
+        <item>When jogging, we put on special clothes so people don\'t think we are running from or to something.</item>
+        <item>"Supervision" sounds a lot cooler than it really is.</item>
+        <item>Technically speaking, wouldn\'t your best friend be your worst enemy?</item>
+    </string-array>
+    <string-array name="floweyAnswersPositive">
+        <item>It is certain.</item>
+        <item>It is decidedly so.</item>
+        <item>Without a doubt.</item>
+        <item>Yes - definitely.</item>
+        <item>You may rely on it.</item>
+        <item>As I see it, yes.</item>
+        <item>Most likely.</item>
+        <item>Outlook good.</item>
+        <item>Yes.</item>
+        <item>Signs point to yes.</item>
+    </string-array>
+    <string-array name="floweyAnswersNeutralPositive">
+        <item>Reply hazy, try again.</item>
+        <item>Ask again later.</item>
+        <item>Better not tell you now.</item>
+        <item>Cannot predict now.</item>
+        <item>Concentrate and ask again.</item>
+        <item>It should work out.</item>
+        <item>Rather yes, than no.</item>
+        <item>Possibly.. Possibly not..</item>
+        <item>Maybe..</item>
+        <item>Rephrase for better answer.</item>
+    </string-array>
+    <string-array name="floweyAnswersNeutralNegative">
+        <item>Better not tell you now.</item>
+        <item>Do you really want to know?</item>
+        <item>You already know the answer.</item>
+        <item>Don\'t count on it.</item>
+        <item>My reply is no.</item>
+        <item>My sources say no.</item>
+        <item>Outlook not so good.</item>
+        <item>Very doubtful.</item>
+        <item>No.</item>
+        <item>You know it yourself.</item>
+    </string-array>
+    <string-array name="floweyAnswersNegative">
+        <item>It will never happen..</item>
+        <item>Don\'t even think about it..</item>
+        <item>No chances..</item>
+        <item>I see a failure..</item>
+        <item>Only in your dreams</item>
+        <item>You considered it happening?</item>
+        <item>Most likely.. NOT.</item>
+        <item>Are you serious with such a question?</item>
+        <item>Can\'t even imagine it happening</item>
+        <item>You can do nothing about it</item>
+    </string-array>
 </resources>
