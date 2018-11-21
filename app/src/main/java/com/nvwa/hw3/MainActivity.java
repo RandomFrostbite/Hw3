@@ -1,5 +1,6 @@
 package com.nvwa.hw3;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -13,6 +14,8 @@ import static java.lang.Math.random;
 public class MainActivity extends AppCompatActivity {
 
     public static int[] state = {12, 20, 30}; // 1-11 good, 12-19 neutral-good, 13-29 - neutral-bad, 29-41 bad
+    private MediaPlayer mp;
+    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,5 +102,29 @@ public class MainActivity extends AppCompatActivity {
             }
             response.setText(Response[(int) (random() * Response.length)]);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mp.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mp = MediaPlayer.create( this, R.raw.theme );
+        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+                mp.start();
+            }});
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mp.release();
     }
 }
