@@ -3,26 +3,23 @@ package com.nvwa.hw3;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static java.lang.Math.floor;
 import static java.lang.Math.random;
 
 public class MainActivity extends AppCompatActivity {
 
     public static int[] state = {12, 20, 30}; // 1-11 good, 12-19 neutral-good, 13-29 - neutral-bad, 29-41 bad
     private MediaPlayer mp;
-    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView flowey = (ImageView)findViewById(R.id.flowey);
+        ImageView flowey = findViewById(R.id.flowey);
         flowey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
-        flowey.setImageDrawable(getResources().getDrawable(R.drawable.sprite1));
+        flowey.setImageDrawable( getResources().getDrawable( R.drawable.sprite1, null ) );
     }
 
     public void generateAnswer() {
-        TextView dialog = (TextView) findViewById(R.id.dialog);
-        ImageView flowey = (ImageView) findViewById(R.id.flowey);
-        TextView response = (TextView) findViewById(R.id.floweyResponse);
+        TextView dialog = findViewById(R.id.dialog);
+        ImageView flowey = findViewById(R.id.flowey);
+        TextView response = findViewById(R.id.floweyResponse);
 
         // Logic to change dialog (text above)
         // Chance to change is 5%
@@ -74,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         int rndDog = (int) (random() * 100);
         if (rndDog < 5) {
             dialog.setText(R.string.annoyingDogDialog);
-            flowey.setImageDrawable(getResources().getDrawable(R.drawable.sprite42));
+            flowey.setImageDrawable( getResources().getDrawable(R.drawable.sprite42, null) );
             response.setText(R.string.annoyingDogDialog);
         } else {
             int rndExpression = (int) (random() * 40) + 1; // 1-41
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 if (rndExpression >= state[i])
                     s = i+1;
             }
-            flowey.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("sprite" + rndExpression, "drawable", getPackageName())));
+            flowey.setImageDrawable( getResources().getDrawable( getResources().getIdentifier("sprite" + rndExpression, "drawable", getPackageName() ), null ) );
 
             String Response[] = new String[10];
             switch (s) {
