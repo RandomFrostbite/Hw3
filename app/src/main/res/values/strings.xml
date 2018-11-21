@@ -2,6 +2,7 @@
     <string name="app_name">Homework 3</string>
     <string name="dialog">Howdy!\nI\'m Flowey!\nFlowey the Flower!</string>
     <string name="annoyingDogDialog">Bark! Bark! Bark.</string>
+    <string name="listening">I\'m listening..</string>
     <string-array name="floweyDialog">
         <item>Trying to get rich by playing the lottery is like trying to commit suicide by flying on commercial airlines.</item>
         <item>I didn\’t exist in your world until you started reading this sentence of mine.</item>
@@ -68,12 +69,24 @@
         <item>It will never happen..</item>
         <item>Don\'t even think about it..</item>
         <item>No chances..</item>
-        <item>I see a failure..</item>
+        <item>Do you really want to know?</item>
         <item>Only in your dreams</item>
         <item>You considered it happening?</item>
         <item>Most likely.. NOT.</item>
         <item>Are you serious with such a question?</item>
         <item>Can\'t even imagine it happening</item>
-        <item>You can do nothing about it</item>
+        <item>You really think it could happen?</item>
+    </string-array>
+    <string-array name="floweyTouchResponseGood">
+        <item>Please don\'t touch me</item>
+        <item>I don\'t like being touched!</item>
+        <item>No touching please</item>
+        <item>Don\'t hurt me</item>
+        <item>I\'m delicate flower</item>
+    </string-array>
+    <string-array name="floweyTouchResponseBad">
+        <item>…</item>
+        <item>I hate you</item>
+        <item>Hands off!</item>
     </string-array>
 </resources>

@@ -1,5 +1,6 @@
 package com.nvwa.hw3;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,6 +9,7 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,51 +20,71 @@ import static java.lang.Math.random;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    public static int[] state = {12, 20, 30}; // 1-11 good, 12-19 neutral-good, 13-29 - neutral-bad, 29-41 bad
+    public static int[] state = {12, 20, 30}; // flowey's expression: 1-11 good, 12-19 neutral-good, 20-29 - neutral-bad, 30-41 bad
     private MediaPlayer mp;
+    private int counter = 0;
     static public SensorManager mSensorManager;
     public List<Sensor> SensorList;
-    boolean sToggled = false;
+    boolean sToggledL = false, sToggledP = false;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        SensorList = mSensorManager.getSensorList(Sensor.TYPE_LIGHT);
-        //mSensorManager.getSensorList(Sensor.TYPE_PROXIMITY); // add somehow
+        SensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
+        final TextView dialog = findViewById(R.id.dialog);
         ImageView flowey = findViewById(R.id.flowey);
+        final TextView response = findViewById(R.id.floweyResponse);
+
         flowey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateAnswer();
+                counter++;
             }
         });
         flowey.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                generateAnswer();
+                counter++;
                 return false;
             }
         });
-
-        /*
         flowey.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if ( event.getAction() == MotionEvent.ACTION_DOWN )
-                    ((ImageView)v).setImageDrawable( getResources().getDrawable(R.drawable.sprite2) ); // wink animation
-                else if ( event.getAction() == MotionEvent.ACTION_UP ) {
-                    generateAnswer();
-                    v.performClick();
+                if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
+                    String touchResponse[];
+                    if (counter < 10) {
+                        ( (ImageView) v).setImageDrawable(getResources().getDrawable(R.drawable.sprite13, null) );
+                        touchResponse = getResources().getStringArray(R.array.floweyTouchResponseGood);
+                    } else {
+                        ( (ImageView) v).setImageDrawable(getResources().getDrawable(R.drawable.sprite28, null) );
+                        touchResponse = getResources().getStringArray(R.array.floweyTouchResponseBad);
+                        dialog.setText("");
+                        if ( counter == 10 ) {
+                            mp.release();
+                            mp = MediaPlayer.create(getApplicationContext(), R.raw.themebad);
+                            mp.setLooping(true);
+                            mp.start();
+                        }
+                    }
+                    response.setText( touchResponse[ (int)(random() * touchResponse.length) ] );
+                } else if ( event.getAction() == MotionEvent.ACTION_UP ) {
+                    if (counter < 11)
+                        ( (ImageView) v).setImageDrawable(getResources().getDrawable(R.drawable.sprite1, null) );
+                    else {
+                        dialog.setText("");
+                        ( (ImageView) v).setImageDrawable(getResources().getDrawable(R.drawable.sprite29, null) );
+                    }
+                    response.setText("");
                 }
                 return false;
             }
         });
-        */
-
         flowey.setImageDrawable( getResources().getDrawable( R.drawable.sprite1, null ) );
     }
 
@@ -71,13 +93,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         ImageView flowey = findViewById(R.id.flowey);
         TextView response = findViewById(R.id.floweyResponse);
 
-        // Logic to change dialog (text above)
+        // Logic to change dialog (text above) if flowey is not angry
         // Chance to change is 5%
-        double rndDialogChange = random() * 100;
-        if (rndDialogChange < 5 ||
-                dialog.getText().toString().equals(getResources().getString(R.string.annoyingDogDialog))) {
-            String[] dialogArray = getResources().getStringArray(R.array.floweyDialog);
-            dialog.setText(dialogArray[(int) (random() * dialogArray.length)]);
+        if ( counter < 10 ) {
+            double rndDialogChange = random() * 100;
+            if (rndDialogChange < 5 ||
+                    dialog.getText().toString().equals(getResources().getString(R.string.annoyingDogDialog))) {
+                String[] dialogArray = getResources().getStringArray(R.array.floweyDialog);
+                dialog.setText(dialogArray[(int) (random() * dialogArray.length)]);
+            }
+        } else {
+            dialog.setText("");
         }
 
         // Logic to generate flowey's emotion and then to match with an answer
@@ -88,7 +114,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             flowey.setImageDrawable( getResources().getDrawable(R.drawable.sprite42, null) );
             response.setText(R.string.annoyingDogDialog);
         } else {
-            int rndExpression = (int) (random() * 40) + 1; // 1-41
+            int rndExpression;
+            if ( counter < 10 )
+                rndExpression = (int) (random() * 28) + 1; // 1-29 flowey is neutral, will not give very bad answers
+            else
+                rndExpression = (int) (random() * 12) + 30; // 30-41 flowey is angry, always negative answers
             int s = 0; // state
             for (int i = 0; i < state.length; i++) {
                 if (rndExpression >= state[i])
@@ -126,7 +156,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        mp = MediaPlayer.create( this, R.raw.theme );
+        if ( counter < 10 )
+            mp = MediaPlayer.create( this, R.raw.theme );
+        else
+             mp = MediaPlayer.create( this, R.raw.themebad );
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -134,7 +167,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 mp.start();
             }});
         for ( int i = 0; i < SensorList.size(); i++ )
-            mSensorManager.registerListener(this, SensorList.get(i), 500000 );
+            if ( SensorList.get(i).getType() == Sensor.TYPE_LIGHT || SensorList.get(i).getType() == Sensor.TYPE_PROXIMITY )
+                mSensorManager.registerListener(this, SensorList.get(i), 500000);
     }
 
     @Override
@@ -146,19 +180,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         float sensVal = event.values[0];
-        if ((event.sensor.getType() == Sensor.TYPE_LIGHT && sensVal < 100) ||
-                (event.sensor.getType() == Sensor.TYPE_PROXIMITY && sensVal == 0)) {
-            sToggled = true;
-        } else {
-            if (sToggled) {
-                sToggled = false;
+        if ( event.sensor.getType() == Sensor.TYPE_LIGHT && sensVal < 100 && !sToggledL ) {
+            floweyListenState();
+            sToggledL = true;
+        } else if ( event.sensor.getType() == Sensor.TYPE_PROXIMITY && sensVal < 1 && !sToggledP ) {
+            floweyListenState();
+            sToggledP = true;
+        } else if ( event.sensor.getType() == Sensor.TYPE_LIGHT && sensVal > 1000 && sToggledL ) {
+            sToggledL = false;
+            if ( !sToggledP )
                 generateAnswer();
-            }
+        } else if ( event.sensor.getType() == Sensor.TYPE_PROXIMITY && sensVal > 3 && sToggledP ) {
+            sToggledP = false;
+            if ( !sToggledL )
+                generateAnswer();
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public void floweyListenState() {
+        ImageView flowey = findViewById(R.id.flowey);
+        TextView response = findViewById(R.id.floweyResponse);
+
+        if (counter < 10)
+            flowey.setImageDrawable( getResources().getDrawable(R.drawable.sprite2, null) ); // wink animation
+        else
+            flowey.setImageDrawable( getResources().getDrawable(R.drawable.sprite24, null) );
+
+        response.setText(R.string.listening);
     }
 }
