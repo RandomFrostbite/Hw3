@@ -1,5 +1,10 @@
 package com.nvwa.hw3;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,17 +12,26 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import static java.lang.Math.random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     public static int[] state = {12, 20, 30}; // 1-11 good, 12-19 neutral-good, 13-29 - neutral-bad, 29-41 bad
     private MediaPlayer mp;
+    static public SensorManager mSensorManager;
+    public List<Sensor> SensorList;
+    boolean sToggled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        SensorList = mSensorManager.getSensorList(Sensor.TYPE_LIGHT);
+        //mSensorManager.getSensorList(Sensor.TYPE_PROXIMITY); // add somehow
 
         ImageView flowey = findViewById(R.id.flowey);
         flowey.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mp.pause();
+        for ( int i = 0; i < SensorList.size(); i++ )
+            mSensorManager.unregisterListener(this, SensorList.get(i) );
     }
 
     @Override
@@ -117,11 +133,32 @@ public class MainActivity extends AppCompatActivity {
                 mp.setLooping(true);
                 mp.start();
             }});
+        for ( int i = 0; i < SensorList.size(); i++ )
+            mSensorManager.registerListener(this, SensorList.get(i), 500000 );
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mp.release();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float sensVal = event.values[0];
+        if ((event.sensor.getType() == Sensor.TYPE_LIGHT && sensVal < 100) ||
+                (event.sensor.getType() == Sensor.TYPE_PROXIMITY && sensVal == 0)) {
+            sToggled = true;
+        } else {
+            if (sToggled) {
+                sToggled = false;
+                generateAnswer();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
