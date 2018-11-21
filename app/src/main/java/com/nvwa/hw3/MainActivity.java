@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     }
                     response.setText( touchResponse[ (int)(random() * touchResponse.length) ] );
                 } else if ( event.getAction() == MotionEvent.ACTION_UP ) {
-                    if (counter < 11)
+                    if (counter < 10)
                         ( (ImageView) v).setImageDrawable(getResources().getDrawable(R.drawable.sprite1, null) );
                     else {
                         dialog.setText("");
@@ -102,14 +102,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 String[] dialogArray = getResources().getStringArray(R.array.floweyDialog);
                 dialog.setText(dialogArray[(int) (random() * dialogArray.length)]);
             }
-        } else {
-            dialog.setText("");
         }
 
         // Logic to generate flowey's emotion and then to match with an answer
-        // 5% there will be a dog
+        // 5% there will be a dog, if flowey is not angry
         int rndDog = (int) (random() * 100);
-        if (rndDog < 5) {
+        if ( rndDog < 5 && counter < 10 ) {
             dialog.setText(R.string.annoyingDogDialog);
             flowey.setImageDrawable( getResources().getDrawable(R.drawable.sprite42, null) );
             response.setText(R.string.annoyingDogDialog);
@@ -203,13 +201,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void floweyListenState() {
+        TextView dialog = findViewById(R.id.dialog);
         ImageView flowey = findViewById(R.id.flowey);
         TextView response = findViewById(R.id.floweyResponse);
 
         if (counter < 10)
             flowey.setImageDrawable( getResources().getDrawable(R.drawable.sprite2, null) ); // wink animation
-        else
-            flowey.setImageDrawable( getResources().getDrawable(R.drawable.sprite24, null) );
+        else {
+            dialog.setText("");
+            flowey.setImageDrawable(getResources().getDrawable(R.drawable.sprite24, null));
+        }
 
         response.setText(R.string.listening);
     }
