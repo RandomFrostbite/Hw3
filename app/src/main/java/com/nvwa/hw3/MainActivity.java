@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } else {
             int rndExpression;
             if ( counter < 10 )
-                rndExpression = (int) (random() * 28) + 1; // 1-29 flowey is neutral, will not give very bad answers
+                rndExpression = (int) (random() * 29) + 1; // 1-29 flowey is neutral, will not give very bad answers
             else
                 rndExpression = (int) (random() * 12) + 30; // 30-41 flowey is angry, always negative answers
             int s = 0; // state
