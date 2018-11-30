@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } else if ( event.sensor.getType() == Sensor.TYPE_PROXIMITY && sensVal < 1 && !sToggledP ) {
             floweyListenState();
             sToggledP = true;
-        } else if ( event.sensor.getType() == Sensor.TYPE_LIGHT && sensVal > 1000 && sToggledL ) {
+        } else if ( event.sensor.getType() == Sensor.TYPE_LIGHT && sensVal > 100 && sToggledL ) {
             sToggledL = false;
             if ( !sToggledP )
                 generateAnswer();
